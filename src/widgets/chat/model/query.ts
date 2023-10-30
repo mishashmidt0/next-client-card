@@ -1,23 +1,12 @@
+import { getMessage } from "@/src/shared/query/chat";
 import {useQuery} from "@tanstack/react-query";
+import {queryKey} from "@/src/shared/lib/query-key";
 
 
-
-export default async function useGetAllMessage(){
-const data = fetch(`http://localhost:3080/api/chat`,{
-    method:"GET",
-    mode: 'no-cors',
-    headers: {
-        "Content-Type": "application/json",
-    },
-})
-    .then(function (response) {
-    return response.json()
-    })
-    .then(function (data) {
-        console.log('data', data)
-    })
-
-
-    return data
+export default function useGetAllMessage(){
+ return useQuery({
+     queryFn: () => getMessage(),
+     queryKey: queryKey('allMessage')
+ })
 }
 
