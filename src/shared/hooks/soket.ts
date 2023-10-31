@@ -1,11 +1,12 @@
 import {useEffect, useRef} from "react";
-import crypto from "crypto";
 import {Socket, io} from "socket.io-client";
 import {useParams} from "next/navigation";
 import {DefaultEventsMap} from "@socket.io/component-emitter";
 import {useQueryClient} from "@tanstack/react-query";
 import {queryKey} from "@/src/shared/lib/query-key";
 import {Msg} from "@/src/widgets/chat/model/type";
+import {v4 as uuidv4} from "uuid";
+
 
 export function useSocket(){
     const client = useQueryClient()
@@ -31,7 +32,7 @@ export function useSocket(){
         if(typeof window !== 'undefined'){
             const user = localStorage.getItem('user')
             if(!user){
-                userNameRef.current = crypto.randomBytes(20).toString('hex')
+                userNameRef.current = uuidv4()
                 localStorage.setItem('user', userNameRef.current)
             } else {
                 userNameRef.current = user
