@@ -31,7 +31,7 @@ export default function Chat  (){
 }
 
 
-    return <div className={'absolute left-10 bottom-10 space-y-4'}>
+    return <div className={'sticky bottom-10 space-y-4 min-w-[350px]'}>
         <div className={'max-h-[400px] overflow-y-scroll  px-2 relative scroll-smooth'} ref={divRef}>
                 {data?.map(({id,msg,user}) => <p key={id} className={cc(['ml-2', {'text-end': user === userNameRef.current }])}>{msg}</p>)}
         </div>
