@@ -3,6 +3,11 @@
 import Chat from "@/src/widgets/chat";
 import PackList from "@/src/widgets/pack-list";
 
+
+//TODO сделать попап для копирования ссылки
+//TODO бэк отправлять Имя карточки
+//TODO зеленная кнопка выбрать героя для -> поиска, что бы угадывали, ответ успешно или не успешно
+
 export default function Home() {
 
     return (

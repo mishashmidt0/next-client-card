@@ -9,6 +9,7 @@ import Button from "@/src/shared/ui/Button";
 //TODO скролл не опускаеться вниз после написания текста
 //TODO скролл в чате
 //TODO почему сообщение отправляеться мне же
+//TODO выводить чат конкретной комнаты
 
 export default function Chat  (){
     const divRef = useRef<HTMLDivElement | null>(null)
