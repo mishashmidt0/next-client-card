@@ -1,7 +1,12 @@
 import useCreateCard from "@/src/feature/create-pack-form/mutate";
-import Input from "@/src/shared/ui/Input";
-import {ChangeEvent, useState} from "react";
-import Button from "@/src/shared/ui/Button";
+import { Input } from "@/src/shared/ui/Input";
+
+import {Controller, SubmitHandler, useForm } from "react-hook-form";
+
+interface IFormInput {
+    title: string;
+    file: File;
+}
 
 
 //TODO отправлять Имя героя на бэк вмекте с файлом
@@ -9,34 +14,34 @@ import Button from "@/src/shared/ui/Button";
 //TODO при загрузке лоадер
 
 export default function CreatePackForm() {
-    const [value, setValue] = useState<string>()
-    const [file, setFile] = useState<File>()
     const {mutate} = useCreateCard()
 
-    const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
-        setValue(e.target.value)
-    }
+    const { control, handleSubmit,watch } = useForm<IFormInput>({
 
-    const onChangeFile = (e:ChangeEvent<HTMLInputElement>) => {
-        if( e.target.files?.[0] ){
-            setFile(e.target.files?.[0])
-        }
+    })
 
-    }
-
-    const onSubmit = () =>{
-        if(file && value){
+    const onSubmit: SubmitHandler<IFormInput>  = ({title,file}) =>{
             const formData = new FormData()
-            formData.append("file", file);
-            mutate({formData})
-        }
+            formData.append("avatar", file);
+            formData.append('title', title);
+            mutate(formData)
     }
-
-
-    return <div className={'flex flex-col gap-4'}>
-        <Input value={value} onChange={onChangeHandler} placeholder={'имя карточки'}/>
-        <input type="file" onChange={onChangeFile} accept={'image/*, .png, .jpg, .wepb'}/>
-
-        <Button onClick={onSubmit} disabled={!file} text={'отправить'}/>
-    </div>
+    console.log(watch())
+    return (
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <Controller
+                name="title"
+                control={control}
+                render={({ field:{value, ...other} }) => <Input {...other} value={value || ''}/>}
+            />
+            <Controller
+                name="file"
+                control={control}
+                render={({ field:{value, onChange, ...other} }) => (
+                    <input {...other} type="file" value={(value as File)?.name || ''} onChange={(e)=> onChange(e.target.files?.[0])}  accept={'image/*, .png, .jpg, .wepb'} />
+                )}
+            />
+            <input type="submit" />
+        </form>
+    )
 }
