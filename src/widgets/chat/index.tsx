@@ -1,9 +1,9 @@
 import {ChangeEvent, KeyboardEvent, useRef, useState} from "react";
 import useGetAllMessage from "@/src/widgets/chat/model/query";
 import {useSocket} from "@/src/shared/hooks/soket";
-import cc from "@/src/shared/lib/classcat";
-import Input from "@/src/shared/ui/Input";
+import Input  from "@/src/shared/ui/Input";
 import Button from "@/src/shared/ui/Button";
+import cc from "@/src/shared/lib/classcat";
 
 
 //TODO скролл не опускаеться вниз после написания текста
@@ -32,8 +32,9 @@ export default function Chat  (){
 }
 
 
-    return <div className={'sticky bottom-10 space-y-4 min-w-[350px]'}>
-        <div className={'max-h-[400px] overflow-y-scroll  px-2 relative scroll-smooth'} ref={divRef}>
+    return <div className={'flex flex-col justify-end grow bg-green-200'}>
+            <div className={'sticky bottom-10 space-y-4'}>
+        <div className={'max-h-[70vh] overflow-y-scroll  px-2 relative scroll-smooth'} ref={divRef}>
                 {data?.map(({id,msg,user}) => <p key={id} className={cc(['ml-2', {'text-end': user === userNameRef.current }])}>{msg}</p>)}
         </div>
 
@@ -45,5 +46,6 @@ export default function Chat  (){
                 />
             <Button onClick={sendMessage} text={'отправить'}/>
         </div>
+    </div>
     </div>
 }

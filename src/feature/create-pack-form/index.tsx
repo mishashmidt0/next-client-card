@@ -1,7 +1,9 @@
 import useCreateCard from "@/src/feature/create-pack-form/mutate";
-import { Input } from "@/src/shared/ui/Input";
+import  Input  from "@/src/shared/ui/Input";
 
 import {Controller, SubmitHandler, useForm } from "react-hook-form";
+import {useRef} from "react";
+import Image from "next/image";
 
 interface IFormInput {
     title: string;
@@ -16,32 +18,43 @@ interface IFormInput {
 export default function CreatePackForm() {
     const {mutate} = useCreateCard()
 
-    const { control, handleSubmit,watch } = useForm<IFormInput>({
+    const { control, handleSubmit ,watch} = useForm<IFormInput>({
 
     })
-
     const onSubmit: SubmitHandler<IFormInput>  = ({title,file}) =>{
             const formData = new FormData()
             formData.append("avatar", file);
             formData.append('title', title);
             mutate(formData)
     }
-    console.log(watch())
+    const inputRef = useRef<HTMLInputElement | null>(null)
+   const handelClick = ()=>{
+       inputRef.current && inputRef.current.click()
+   }
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-                name="title"
-                control={control}
-                render={({ field:{value, ...other} }) => <Input {...other} value={value || ''}/>}
-            />
+        <form onSubmit={handleSubmit(onSubmit)} className={'space-y-4'}>
+
             <Controller
                 name="file"
                 control={control}
-                render={({ field:{value, onChange, ...other} }) => (
-                    <input {...other} type="file" value={(value as File)?.name || ''} onChange={(e)=> onChange(e.target.files?.[0])}  accept={'image/*, .png, .jpg, .wepb'} />
-                )}
+                render={({ field:{value, onChange, ref, ...other} }) => (
+                    <div className={'flex justify-between  gap-2 items-center'}>
+                        <input className={'hidden'} {...other} ref={(e)=> {
+                            ref(e)
+                                inputRef.current = e
+
+                        }} type="file" value='' onChange={(e)=> onChange(e.target.files?.[0])}  accept={'image/*, .png, .jpg, .wepb'} />
+                        <p>{(value as File)?.name || 'выберите фото'}</p>
+                        <button onClick={handelClick} className={'bg-green-200 p-2'} type={'button'}>Выбрать</button>
+                    </div>
+               )}
             />
-            <input type="submit" />
+            <Controller
+                name="title"
+                control={control}
+                render={({ field:{value, ...other} }) => <Input {...other} value={value || ''} placeholder={"Название колоды"}/>}
+            />
+            <button className={'bg-green-200 p-2'}>Сохранить</button>
         </form>
     )
 }

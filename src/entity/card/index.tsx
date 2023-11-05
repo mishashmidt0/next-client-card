@@ -12,9 +12,9 @@ export default function Card({url,name}:Props){
 
     return <div  className={' flex flex-col gap-4 items-center justify-between overflow-hidden'}>
         <div className={'relative'}>
-            <Image src={isVisible?`${BASE_URL +"/"+ url}` : '/not.png' } alt={'mimetype'} width={180} height={180}/>
+            <Image src={isVisible?`${BASE_URL +"/"+ url}` : '/not.png' } alt={'mimetype'} className={'aspect-square object-cover'} width={180} height={180}/>
             <Button onClick={()=>setIsVisible(prev=> !prev)} className={'absolute bottom-2 right-[50%] translate-x-1/2'} text={isVisible? 'скрыть':'показать'}/>
         </div>
-        <p>{name}</p>
+        <p className={'truncate'}>{name}</p>
     </div>
 }

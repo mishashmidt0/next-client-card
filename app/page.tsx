@@ -1,7 +1,14 @@
 "use client";
 import Link from "next/link";
 import { v4 as uuidv4 } from 'uuid';
+import {ROOTS} from "@/src/shared/const/root";
 
+
+const navigate = [
+    {title:'Начать играть', href:ROOTS.room(uuidv4())},
+    {title:'Создать колоду', href:ROOTS.create},
+    {title:'Мои колоды', href:ROOTS.main},
+]
 export default function Home() {
 
   return (
@@ -9,9 +16,7 @@ export default function Home() {
          Старт
 
         <div className={'flex flex-col gap-4 items-center'}>
-            <Link href={`/room/${uuidv4()}`}>Начать играть</Link>
-            <Link href={`/create`}>Создать колоду</Link>
-            <Link href={`/create`}>Мои колоды</Link>
+            {navigate.map(({title,href},index)=>  <Link key={index} href={href}>{title}</Link>)}
         </div>
     </main>
   )

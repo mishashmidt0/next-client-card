@@ -2,6 +2,8 @@
 
 import Chat from "@/src/widgets/chat";
 import PackList from "@/src/widgets/pack-list";
+import Link from "next/link";
+import {ROOTS} from "@/src/shared/const/root";
 
 
 //TODO сделать попап для копирования ссылки
@@ -12,11 +14,10 @@ export default function Home() {
 
     return (
         <main className="flex flex-col items-center gap-10 p-24 min-h-screen">
+            <Link href={ROOTS.main} className={'absolute top-10 left-10 font-medium bg-green-200 p-3'} >На главную</Link>
             <h1>Комната</h1>
-            <div className={'flex justify-between gap-10 w-full'}>
-                <div className={'flex flex-col justify-end grow'}>
-                    <Chat />
-                </div>
+            <div className={'grid grid-cols-4 gap-4'}>
+                <Chat />
 
                 <PackList/>
             </div>
