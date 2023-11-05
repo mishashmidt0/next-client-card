@@ -1,3 +1,4 @@
+'use client';
 import useGetPack from "@/src/widgets/pack-list/model/query";
 import Card from "@/src/entity/card";
 

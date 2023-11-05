@@ -1,15 +1,17 @@
 "use client";
 import Link from "next/link";
-import { v4 as uuidv4 } from 'uuid';
-import {ROOTS} from "@/src/shared/const/root";
+import {ROUTES} from "@/src/shared/const/routes";
+import {useId} from "react";
 
 
-const navigate = [
-    {title:'Начать играть', href:ROOTS.room(uuidv4())},
-    {title:'Создать колоду', href:ROOTS.create},
-    {title:'Мои колоды', href:ROOTS.main},
-]
+
 export default function Home() {
+    const id = useId()
+    const navigate = [
+        {title:'Начать играть', href:ROUTES.room(id)},
+        {title:'Создать колоду', href:ROUTES.login},
+        {title:'Мои колоды', href:ROUTES.main},
+    ]
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">

@@ -18,7 +18,7 @@ interface IFormInput {
 export default function CreatePackForm() {
     const {mutate} = useCreateCard()
 
-    const { control, handleSubmit ,watch} = useForm<IFormInput>({
+    const { control, handleSubmit} = useForm<IFormInput>({
 
     })
     const onSubmit: SubmitHandler<IFormInput>  = ({title,file}) =>{

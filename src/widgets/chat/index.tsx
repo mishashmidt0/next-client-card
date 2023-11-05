@@ -1,3 +1,4 @@
+'use client';
 import {ChangeEvent, KeyboardEvent, useRef, useState} from "react";
 import useGetAllMessage from "@/src/widgets/chat/model/query";
 import {useSocket} from "@/src/shared/hooks/soket";
