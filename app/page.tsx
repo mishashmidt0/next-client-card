@@ -1,25 +1,14 @@
-"use client";
-import Link from "next/link";
-import {ROUTES} from "@/src/shared/const/routes";
-import {useId} from "react";
+"use server";
+import cookies from "@/src/shared/lib/cookies-lib";
+import Navigate from "@/src/widgets/navigate";
 
-
-
-export default function Home() {
-    const id = useId()
-    const navigate = [
-        {title:'Начать играть', href:ROUTES.room(id)},
-        {title:'Создать колоду', href:ROUTES.login},
-        {title:'Мои колоды', href:ROUTES.main},
-    ]
+export default async function Home() {
+  const { isAuth } = await cookies();
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-         Старт
-
-        <div className={'flex flex-col gap-4 items-center'}>
-            {navigate.map(({title,href},index)=>  <Link key={index} href={href}>{title}</Link>)}
-        </div>
+      <h1>Старт</h1>
+      <Navigate isAuth={isAuth} />
     </main>
-  )
+  );
 }

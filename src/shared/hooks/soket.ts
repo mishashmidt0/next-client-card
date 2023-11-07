@@ -1,4 +1,4 @@
-import {useEffect, useRef} from "react";
+import {useCallback, useEffect, useRef} from "react";
 import {Socket, io} from "socket.io-client";
 import {useParams} from "next/navigation";
 import {DefaultEventsMap} from "@socket.io/component-emitter";
@@ -14,7 +14,7 @@ export function useSocket(){
     const params = useParams()
     const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap>>()
 
-    const socketInitializer = async () => {
+    const socketInitializer = useCallback(async () => {
         const socket =  io('http://localhost:3080')
         socketRef.current = socket
         socket.on('connect', () => {
@@ -26,7 +26,7 @@ export function useSocket(){
             const data = JSON.parse(payload) as Msg
             client.setQueryData(queryKey('allMessage'), (oldData: Msg[])=> [...oldData, data] )
         })
-    }
+    },[client, params.id])
 
     useEffect(() => {
         if(typeof window !== 'undefined'){
@@ -37,12 +37,12 @@ export function useSocket(){
             } else {
                 userNameRef.current = user
             }
-            socketInitializer()
+            socketInitializer().then()
         }
         return () =>{
             socketRef.current?.disconnect()
         }
-    }, [])
+    }, [socketInitializer])
 
     return {
          userNameRef,

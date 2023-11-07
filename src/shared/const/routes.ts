@@ -2,6 +2,7 @@ export const ROUTES = {
     main: '/',
     login: '/login',
     register: '/register',
-    create: '/create',
-    room:(id:string)=> `/room/${id}`
+    createPack: '/create',
+    myPack: '/my-pack',
+    room: (id: string)=> `/room/${id}`
 }
