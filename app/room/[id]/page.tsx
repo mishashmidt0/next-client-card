@@ -1,15 +1,22 @@
-"use client";
-
+import Back from "@/src/entity/back";
+import { ROUTES } from "@/src/shared/const/routes";
 import Chat from "@/src/widgets/chat";
 import PackList from "@/src/widgets/pack-list";
 
-export default function Home() {
+// TODO сделать попап для копирования ссылки
+// TODO бэк отправлять Имя карточки
+// TODO зеленная кнопка выбрать героя для -> поиска, что бы угадывали, ответ успешно или не успешно
 
-    return (
-        <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            Комната
-            <PackList/>
-            <Chat/>
-        </main>
-    )
+export default function Home() {
+  return (
+    <div>
+      <Back href={ROUTES.main} title={"На главную"} />
+      <h1>Комната</h1>
+      <div className={"grid grid-cols-4 gap-4"}>
+        <Chat />
+
+        <PackList />
+      </div>
+    </div>
+  );
 }

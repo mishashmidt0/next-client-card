@@ -1,17 +1,15 @@
-"use client";
-import Link from "next/link";
-import { v4 as uuidv4 } from 'uuid';
+import cookies from "@/src/shared/lib/cookies-lib";
+import Navigate from "@/src/widgets/navigate";
 
-export default function Home() {
+export default async function Home() {
+  const { isAuth } = await cookies();
+
+  console.log(isAuth);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-         Старт
-
-        <div className={'flex flex-col gap-4 items-center'}>
-            <Link href={`/room/${uuidv4()}`}>Зайти в комнату</Link>
-            <Link href={`/create`}>Создать пачку</Link>
-        </div>
-    </main>
-  )
+    <article className="prose lg:prose-xl flex flex-col items-center justify-between m-auto h-full">
+      <h1>Старт</h1>
+      <Navigate isAuth={isAuth} />
+    </article>
+  );
 }

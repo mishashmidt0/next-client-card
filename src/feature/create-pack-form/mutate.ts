@@ -1,12 +1,13 @@
-import {useMutation} from "@tanstack/react-query";
-import {creatCard} from "@/src/feature/create-pack-form/api";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
-interface Props {
-    formData:FormData
-}
-export default function useCreateCard(){
- return useMutation({
-     mutationFn: ({formData}:Props) => creatCard({formData}),
- })
-}
+import { creatCard } from "@/src/feature/create-pack-form/api";
 
+export default function useCreateCard() {
+  return useMutation({
+    mutationFn: async (formData: FormData) => await creatCard(formData),
+    onSuccess: () => {
+      toast.success("Колода создана");
+    },
+  });
+}

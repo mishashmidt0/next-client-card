@@ -4,30 +4,61 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:turbo": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint-fix": "eslint --fix",
+    "prod-test": "bun run test:all:fix && bun run build",
+    "test:all": "bun run tsc --noEmit && bun run test:eslint && bun run test:stylelint",
+    "test:all:fix": "bun run tsc --noEmit && bun run test:eslint:fix && bun run test:prettier",
+    "test:eslint": "eslint './**/*.{ts,tsx}'",
+    "test:eslint:fix": "bun run test:eslint --fix",
+    "test:prettier": "prettier --write './**/*.{ts,tsx,json,md}'",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*.{js,ts,jsx,tsx}": [
+      "bun lint-fix",
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@tanstack/react-query": "^5.4.3",
     "@tanstack/react-query-devtools": "^5.4.3",
     "@tanstack/react-query-next-experimental": "^5.4.3",
-    "next": "14.0.0",
+    "next": "^14.0.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.47.0",
+    "react-hot-toast": "^2.4.1",
     "socket.io-client": "^4.7.2",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
     "@tanstack/eslint-plugin-query": "^5.0.5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/uuid": "^9.0.6",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10",
-    "eslint": "^8",
+    "daisyui": "latest",
+    "eslint": "^8.0.1",
     "eslint-config-next": "14.0.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-standard-with-typescript": "^39.1.1",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "husky": "^8.0.0",
     "postcss": "^8",
+    "prettier": "^3.0.3",
     "tailwindcss": "^3",
     "typescript": "^5"
   }

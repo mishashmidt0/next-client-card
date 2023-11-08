@@ -1,12 +1,13 @@
-import {ROOT_URL} from "@/src/shared/const/api-const";
-import {ReqPack} from "./type";
+import { type ReqPack } from "./type";
 
-export async function getPack():Promise<ReqPack[]> {
-    const res = await fetch(`${ROOT_URL.api}/pack` )
+import { ROOT_URL } from "@/src/shared/const/api-const";
 
-    if (!res.ok) {
-        throw new Error('Failed to fetch data')
-    }
+export async function getPack(): Promise<ReqPack[]> {
+  const res = await fetch(`${ROOT_URL.api}/pack`);
 
-    return await res.json()
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return await res.json();
 }
