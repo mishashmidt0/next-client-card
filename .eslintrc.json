@@ -46,20 +46,12 @@
       "error",
       {
         "newlines-between": "always",
-        "pathGroupsExcludedImportTypes": [
-          "react"
-        ],
+        "pathGroupsExcludedImportTypes": ["react"],
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true
         },
-        "groups": [
-          "builtin",
-          "external",
-          "parent",
-          "sibling",
-          "index"
-        ],
+        "groups": ["builtin", "external", "parent", "sibling", "index"],
         "pathGroups": [
           {
             "pattern": "react",
@@ -82,25 +74,13 @@
       },
       {
         "blankLine": "always",
-        "prev": [
-          "const",
-          "let",
-          "var"
-        ],
+        "prev": ["const", "let", "var"],
         "next": "*"
       },
       {
         "blankLine": "any",
-        "prev": [
-          "const",
-          "let",
-          "var"
-        ],
-        "next": [
-          "const",
-          "let",
-          "var"
-        ]
+        "prev": ["const", "let", "var"],
+        "next": ["const", "let", "var"]
       }
     ],
     "no-shadow": "off",
@@ -109,11 +89,7 @@
     "no-magic-numbers": [
       "error",
       {
-        "ignore": [
-          0,
-          1,
-          -1
-        ]
+        "ignore": [0, 1, -1]
       }
     ],
     "no-use-before-define": "off",
@@ -121,10 +97,7 @@
       "error",
       {
         "props": true,
-        "ignorePropertyModificationsFor": [
-          "state",
-          "self"
-        ]
+        "ignorePropertyModificationsFor": ["state", "self"]
       }
     ],
     "react/display-name": "off",
@@ -135,10 +108,7 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [
-          ".jsx",
-          ".tsx"
-        ]
+        "extensions": [".jsx", ".tsx"]
       }
     ],
     "react/jsx-props-no-spreading": [
@@ -147,25 +117,18 @@
         "html": "ignore"
       }
     ],
-    "@typescript-eslint/no-unused-vars": [
-      "error"
-    ],
-    "@typescript-eslint/explicit-function-return-type": [
-      "off"
-    ]
+    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/explicit-function-return-type": ["off"],
+    "@typescript-eslint/strict-boolean-expressions": ["off"],
+    "@typescript-eslint/no-misused-promises": ["off"],
+    "@typescript-eslint/triple-slash-reference": ["off"]
   },
   "settings": {
+    "version": "detect",
     "import/resolver": {
       "node": {
-        "paths": [
-          "src"
-        ],
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
+        "paths": ["src"],
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
   }

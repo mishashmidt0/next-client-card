@@ -1,5 +1,5 @@
-type QueryKey = 'allMessage' | 'pack'
+type QueryKey = "allMessage" | "pack";
 
-export function queryKey(key:QueryKey, args?: string[]) {
-    return args ? [key, ...args] : [key]
+export function queryKey(key: QueryKey, args?: string[]) {
+  return args != null ? [key, ...args] : [key];
 }

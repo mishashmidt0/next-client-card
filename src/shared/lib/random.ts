@@ -1,3 +1,5 @@
-function getRandomNumber([min, max]:number[]) {
-    return Math.round(min - 0.5 + Math.random() * (max - min + 1))
+const number = 0.5;
+
+export function getRandomNumber([min, max]: number[]) {
+  return Math.round(min - number + Math.random() * (max - min + 1));
 }

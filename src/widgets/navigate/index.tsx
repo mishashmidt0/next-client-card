@@ -18,14 +18,15 @@ export default function Navigate({ isAuth }: Props) {
       href: isAuth ? ROUTES.createPack : ROUTES.login,
     },
     { title: "Мои колоды", href: isAuth ? ROUTES.myPack : ROUTES.login },
+    { title: "Настройки", href: isAuth ? ROUTES.setting : ROUTES.login },
   ];
 
   return (
     <nav className={"flex flex-col gap-4 items-center"}>
       {navigate.map(({ title, href }, index) => (
-        <Link key={index} href={href}>
-          {title}
-        </Link>
+        <button key={index} className={"btn btn-ghost"}>
+          <Link href={href}>{title}</Link>
+        </button>
       ))}
     </nav>
   );

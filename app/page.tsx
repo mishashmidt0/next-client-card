@@ -1,14 +1,15 @@
-"use server";
 import cookies from "@/src/shared/lib/cookies-lib";
 import Navigate from "@/src/widgets/navigate";
 
 export default async function Home() {
   const { isAuth } = await cookies();
 
+  console.log(isAuth);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <article className="prose lg:prose-xl flex flex-col items-center justify-between m-auto h-full">
       <h1>Старт</h1>
       <Navigate isAuth={isAuth} />
-    </main>
+    </article>
   );
 }

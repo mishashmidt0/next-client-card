@@ -1,10 +1,10 @@
-'use server'
-import { cookies } from 'next/headers'
+"use server";
+import { cookies } from "next/headers";
 
-export default async function cookiesLib(){
-    const access_token = cookies().get('access_token')
+export default async function cookiesLib() {
+  const accessToken = cookies().get("access_token");
 
-return {
-    isAuth:!!access_token
-}
+  return {
+    isAuth: !(accessToken == null),
+  };
 }
