@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ROUTES } from "@/src/shared/const/routes";
+import { Button } from "@/src/shared/ui/button";
 
 interface Props {
   href?: string;
@@ -11,11 +12,8 @@ export default function Back({
   title = "На главную",
 }: Props) {
   return (
-    <Link
-      href={href}
-      className={"absolute top-10 left-10 font-medium bg-green-200 p-3"}
-    >
-      {title}
-    </Link>
+    <Button className={"absolute top-10 left-10"} variant={"link"}>
+      <Link href={href}>{title}</Link>
+    </Button>
   );
 }

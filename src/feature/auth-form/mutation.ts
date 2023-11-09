@@ -2,9 +2,9 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-import { login, register } from "./api";
+import { login, register } from "@/src/feature/auth-form/api";
 
-import { type IFormInput } from "./index";
+import { type IFormInput } from "@/src/feature/auth-form/index";
 
 export function useRegister() {
   const routes = useRouter();

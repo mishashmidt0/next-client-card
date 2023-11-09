@@ -1,14 +1,19 @@
 import { type ReactNode } from "react";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
 import { Providers } from "./providers";
 
+import { cn } from "@/src/shared/lib/utils";
 import Layout from "@/src/widgets/layout";
-const inter = Inter({ subsets: ["latin"] });
+
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +26,12 @@ interface Props {
 export default function RootLayout(props: Props) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body
+        className={cn(
+          "min-h-screen bg-stone-300 font-sans antialiased",
+          fontSans.variable,
+        )}
+      >
         <Providers>
           <Layout>
             {props.children}

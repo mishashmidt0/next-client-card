@@ -4,6 +4,13 @@ import { useId } from "react";
 import Link from "next/link";
 
 import { ROUTES } from "@/src/shared/const/routes";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  navigationMenuTriggerStyle,
+  NavigationMenuList,
+} from "@/src/shared/ui/navigation-menu";
 
 interface Props {
   isAuth: boolean;
@@ -22,12 +29,18 @@ export default function Navigate({ isAuth }: Props) {
   ];
 
   return (
-    <nav className={"flex flex-col gap-4 items-center"}>
-      {navigate.map(({ title, href }, index) => (
-        <button key={index} className={"btn btn-ghost"}>
-          <Link href={href}>{title}</Link>
-        </button>
-      ))}
-    </nav>
+    <NavigationMenu>
+      <NavigationMenuList className={"gap-2"}>
+        {navigate.map(({ title, href }, index) => (
+          <NavigationMenuItem key={index}>
+            <Link href={href} legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                {title}
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+        ))}
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }
