@@ -1,4 +1,4 @@
-import { type IFormInput } from "./index";
+import { type IFormInput } from "@/src/feature/auth-form/index";
 
 import { ROOT_URL } from "@/src/shared/const/api-const";
 

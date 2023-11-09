@@ -11,8 +11,7 @@ export default function Home() {
   return (
     <div>
       <Back href={ROUTES.main} title={"На главную"} />
-      <h1>Комната</h1>
-      <div className={"grid grid-cols-4 gap-4"}>
+      <div className={"grid grid-auto-cols gap-4"}>
         <Chat />
 
         <PackList />

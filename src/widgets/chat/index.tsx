@@ -1,10 +1,12 @@
 "use client";
-import { type ChangeEvent, type KeyboardEvent, useRef, useState } from "react";
+import { type ChangeEvent, type KeyboardEvent, useState } from "react";
 
 import { useSocket } from "@/src/shared/hooks/soket";
 import cc from "@/src/shared/lib/classcat";
-import Button from "@/src/shared/ui/Button";
-import Input from "@/src/shared/ui/Input";
+import { Button } from "@/src/shared/ui/button";
+import { Card, CardContent, CardFooter } from "@/src/shared/ui/card";
+import { Input } from "@/src/shared/ui/input";
+import { Skeleton } from "@/src/shared/ui/skeleton";
 import useGetAllMessage from "@/src/widgets/chat/model/query";
 
 // TODO скролл не опускаеться вниз после написания текста
@@ -13,7 +15,6 @@ import useGetAllMessage from "@/src/widgets/chat/model/query";
 // TODO выводить чат конкретной комнаты
 
 export default function Chat() {
-  const divRef = useRef<HTMLDivElement | null>(null);
   const { data } = useGetAllMessage();
   const { userNameRef, roomId, socketRef } = useSocket();
   const [input, setInput] = useState("");
@@ -35,17 +36,13 @@ export default function Chat() {
       sendMessage();
     }
   };
+  const isPending = true;
 
   return (
-    <div className={"flex flex-col justify-end grow bg-green-200"}>
-      <div className={"sticky bottom-10 space-y-4"}>
-        <div
-          className={
-            "max-h-[70vh] overflow-y-scroll  px-2 relative scroll-smooth"
-          }
-          ref={divRef}
-        >
-          {data?.map(({ id, msg, user }) => (
+    <Card className={"fixed left-5 bottom-10 bg-zinc-100"}>
+      <CardContent className={"flex flex-col max-h-[300px] overflow-y-auto"}>
+        {!isPending &&
+          data?.map(({ id, msg, user }) => (
             <p
               key={id}
               className={cc([
@@ -56,17 +53,12 @@ export default function Chat() {
               {msg}
             </p>
           ))}
-        </div>
-
-        <div className={"space-x-4 flex "}>
-          <Input
-            value={input}
-            onChange={onChangeHandler}
-            onKeyDown={handleKey}
-          />
-          <Button onClick={sendMessage} text={"отправить"} />
-        </div>
-      </div>
-    </div>
+        {isPending && <Skeleton className="rounded-md h-[300px]" />}
+      </CardContent>
+      <CardFooter className={"justify-center pt-2"}>
+        <Input value={input} onChange={onChangeHandler} onKeyDown={handleKey} />
+        <Button onClick={sendMessage}>отправить</Button>
+      </CardFooter>
+    </Card>
   );
 }
