@@ -15,7 +15,7 @@ import useGetAllMessage from "@/src/widgets/chat/model/query";
 // TODO выводить чат конкретной комнаты
 
 export default function Chat() {
-  const { data } = useGetAllMessage();
+  const { data, isPending } = useGetAllMessage();
   const { userNameRef, roomId, socketRef } = useSocket();
   const [input, setInput] = useState("");
 
@@ -36,11 +36,12 @@ export default function Chat() {
       sendMessage();
     }
   };
-  const isPending = true;
 
   return (
     <Card className={"fixed left-5 bottom-10 bg-zinc-100"}>
-      <CardContent className={"flex flex-col max-h-[300px] overflow-y-auto"}>
+      <CardContent
+        className={"relative flex flex-col h-[300px] overflow-y-auto"}
+      >
         {!isPending &&
           data?.map(({ id, msg, user }) => (
             <p

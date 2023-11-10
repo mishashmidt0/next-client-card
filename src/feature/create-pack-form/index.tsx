@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 
 import useCreateCard from "@/src/feature/create-pack-form/mutate";
-import Input from "@/src/shared/ui/Input";
+import { Input } from "@/src/shared/ui/input";
 
 interface IFormInput {
   title: string;
