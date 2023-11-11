@@ -24,11 +24,16 @@ export default function RootLayout(props: Props) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={cn(["min-h-screen", font.className])}>
+        <body
+          className={cn([
+            "min-h-screen bg-white dark:bg-[#313338]",
+            font.className,
+          ])}
+        >
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
-            enableSystem
+            enableSystem={false}
             disableTransitionOnChange
           >
             <Providers>
