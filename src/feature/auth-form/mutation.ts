@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { login, register } from "@/src/feature/auth-form/api";
-
 import { type IFormInput } from "@/src/feature/auth-form/index";
 
 export function useRegister() {

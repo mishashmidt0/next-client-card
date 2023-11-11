@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Controller, type SubmitHandler, useForm } from "react-hook-form";
 
 import { useRegister, useLogin } from "@/src/feature/auth-form/mutation";
-import Input from "@/src/shared/ui/Input";
+import { Input } from "@/src/shared/ui/input";
 
 export interface IFormInput {
   email: string;
