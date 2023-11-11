@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "@/public/styles/globals.css";
+import "@uploadthing/react/styles.css";
 import { Toaster } from "react-hot-toast";
 
 import { Providers } from "@/app/providers";

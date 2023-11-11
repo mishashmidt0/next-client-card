@@ -87,7 +87,7 @@
     "no-debugger": "error",
     "no-unused-vars": "off",
     "no-magic-numbers": [
-      "error",
+      "off",
       {
         "ignore": [0, 1, -1]
       }
@@ -122,7 +122,8 @@
     "@typescript-eslint/explicit-function-return-type": ["off"],
     "@typescript-eslint/strict-boolean-expressions": ["off"],
     "@typescript-eslint/no-misused-promises": ["off"],
-    "@typescript-eslint/triple-slash-reference": ["off"]
+    "@typescript-eslint/triple-slash-reference": ["off"],
+    "@typescript-eslint/consistent-type-assertions": ["off"]
   },
   "settings": {
     "version": "detect",
