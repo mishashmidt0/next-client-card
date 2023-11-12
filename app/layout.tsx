@@ -6,10 +6,11 @@ import { Open_Sans } from "next/font/google";
 import "@/public/styles/globals.css";
 import "@uploadthing/react/styles.css";
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from "src/widgets/providers/theme-provider";
 
 import { Providers } from "@/app/providers";
-import { ThemeProvider } from "@/src/feature/theme-provider";
 import { cn } from "@/src/shared/lib/utils";
+import { ModalProvider } from "@/src/widgets/providers/modal-provider";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -21,6 +22,8 @@ interface Props {
   children: ReactNode;
   modal: ReactNode;
 }
+
+// TODO Есть ли смысл импоритровать здесь ModalProvider или лучше в main layout  ?
 export default function RootLayout(props: Props) {
   return (
     <ClerkProvider>
@@ -38,6 +41,8 @@ export default function RootLayout(props: Props) {
             disableTransitionOnChange
           >
             <Providers>
+              <ModalProvider />
+
               {props.children}
               {props.modal}
             </Providers>
