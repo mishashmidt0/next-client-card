@@ -1,7 +1,7 @@
 "use client";
 import { type ChangeEvent, type KeyboardEvent, useState } from "react";
 
-import { useSocket } from "@/src/shared/hooks/soket";
+import { useSocket } from "@/src/shared/hooks/use-soket";
 import cc from "@/src/shared/lib/classcat";
 import { Button } from "@/src/shared/ui/button";
 import { Card, CardContent, CardFooter } from "@/src/shared/ui/card";
