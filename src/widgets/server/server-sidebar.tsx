@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 
+import { ServerHeader } from "./server-header";
+
 import { currentProfile } from "@/src/shared/lib/current-profile";
 import { db } from "@/src/shared/lib/db";
 
@@ -8,7 +10,7 @@ interface ServerSidebarProps {
 }
 
 export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
-  const profile = currentProfile();
+  const profile = await currentProfile();
 
   if (!profile) {
     return redirect("/");
@@ -35,5 +37,20 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
     },
   });
 
-  return <div>ServerSidebar</div>;
+  if (!server) {
+    return redirect("/");
+  }
+
+  const role = server.members.find((member) => member.profile.id === profile.id)
+    ?.role;
+
+  return (
+    <div
+      className={
+        "flex flex-col h-full text-primary w-full dark:bg-[#2B2D31] bg-[#F2F3F5]"
+      }
+    >
+      <ServerHeader server={server} role={role} />
+    </div>
+  );
 };
