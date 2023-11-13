@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { CreateServerModal } from "@/src/widgets/modals/create-server-modal";
+import { InviteModal } from "@/src/widgets/modals/invite-modal";
 
 // TODO возможно заменить эту логику на динмическу компоненту
 export const ModalProvider = () => {
@@ -19,6 +20,7 @@ export const ModalProvider = () => {
   return (
     <>
       <CreateServerModal />
+      <InviteModal />
     </>
   );
 };

@@ -6,7 +6,7 @@ const f = createUploadthing();
 const handlerAuth = () => {
   const userId = auth();
 
-  if (!userId) throw new Error("Неавторизован");
+  if (!userId) throw new Error("Не авторизован");
 
   return { userId };
 };
