@@ -24,7 +24,7 @@ export const InviteModal = () => {
   const [copied, setCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const inviteUrl = `${origin}/invite/${server?.inviteCode}/invite-code`;
+  const inviteUrl = `${origin}/invite/${server?.inviteCode}`;
 
   const onCopy = () => {
     void navigator.clipboard.writeText(inviteUrl);
@@ -66,6 +66,7 @@ export const InviteModal = () => {
           </Label>
           <div className={"flex items-center mt-2 gap-x-2"}>
             <Input
+              readOnly
               disabled={isLoading}
               value={inviteUrl}
               className={
