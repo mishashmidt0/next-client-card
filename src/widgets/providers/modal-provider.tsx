@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { CreateChannelModal } from "@/src/widgets/modals/create-channel-modal";
 import { CreateServerModal } from "@/src/widgets/modals/create-server-modal";
 import { EditServerModal } from "@/src/widgets/modals/edit-server-modal";
 import { InviteModal } from "@/src/widgets/modals/invite-modal";
@@ -25,6 +26,7 @@ export const ModalProvider = () => {
       <InviteModal />
       <EditServerModal />
       <MembersModal />
+      <CreateChannelModal />
     </>
   );
 };
