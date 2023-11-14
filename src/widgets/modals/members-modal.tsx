@@ -53,6 +53,26 @@ export const MembersModal = () => {
   const isModalOpen = isOpen && type === "members";
   const { server } = data as { server: Server & ServerWithMembersWithProfiles };
 
+  const onKick = async (memberId: string) => {
+    try {
+      setLoadingId(memberId);
+      const url = qs.stringifyUrl({
+        url: `/api/members/${memberId}`,
+        query: {
+          serverId: server?.id,
+        },
+      });
+      const res = await axios.delete(url);
+
+      router.refresh();
+      onOpen("members", { server: res.data });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoadingId("");
+    }
+  };
+
   const onRoleChange = async (memberId: string, role: MemberRole) => {
     try {
       setLoadingId(memberId);
@@ -60,7 +80,6 @@ export const MembersModal = () => {
         url: `/api/members/${memberId}`,
         query: {
           serverId: server.id,
-          memberId,
         },
       });
       const res = await axios.patch(url, { role });
@@ -149,19 +168,23 @@ export const MembersModal = () => {
                         </DropdownMenuSub>
 
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={async () => {
+                            await onKick(member.id);
+                          }}
+                        >
                           <Gavel className={"mr-2 h-4 w-4"} />
                           Kick
-                          {loadingId === member.id && (
-                            <Loader2
-                              className={"animate-spin text-zinc-300 w-4 h-4"}
-                            />
-                          )}
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
                 )}
+              {loadingId === member.id && (
+                <Loader2
+                  className={"animate-spin text-zinc-500 ml-auto h-4 w-4"}
+                />
+              )}
             </div>
           ))}
         </ScrollArea>
