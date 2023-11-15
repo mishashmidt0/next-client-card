@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { v4 as uuidv4 } from "uuid";
 
 import { currentProfile } from "@/src/shared/lib/current-profile";
 import { db } from "@/src/shared/lib/db";
@@ -22,10 +21,21 @@ export async function PATCH(
     const server = await db.server.update({
       where: {
         id: params.serverId,
-        profileId: profile.id,
+        profileId: {
+          not: profile.id,
+        },
+        members: {
+          some: {
+            profileId: profile.id,
+          },
+        },
       },
       data: {
-        inviteCode: uuidv4(),
+        members: {
+          deleteMany: {
+            profileId: profile.id,
+          },
+        },
       },
     });
 

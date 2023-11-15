@@ -1,6 +1,7 @@
+import { ChannelType } from ".prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -22,16 +23,31 @@ import {
   FormMessage,
 } from "@/src/shared/ui/form";
 import { Input } from "@/src/shared/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/shared/ui/select";
 
 const formSchema = z.object({
-  name: z.string().min(1, {
-    message: "Введите название канала",
-  }),
+  name: z
+    .string()
+    .min(1, {
+      message: "Введите название комнаты",
+    })
+    .refine((name) => name !== "general", {
+      message: 'Channel name cannot be "general"',
+    }),
+  type: z.nativeEnum(ChannelType),
 });
 
 export const CreateChannelModal = () => {
   const { isOpen, type, onClose } = useModal();
   const router = useRouter();
+  const params = useParams();
 
   const isModalOpen = isOpen && type === "createChannel";
 
@@ -39,6 +55,7 @@ export const CreateChannelModal = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      type: ChannelType.TEXT,
     },
   });
 
@@ -46,14 +63,17 @@ export const CreateChannelModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post("/api/servers", values);
+      await axios.post("/api/channels", values, {
+        params: {
+          serverId: params?.serverId,
+        },
+      });
       form.reset();
       router.refresh();
       onClose();
     } catch (e) {
       console.log(e);
     }
-    console.log(values);
   };
 
   const handleClose = () => {
@@ -66,7 +86,7 @@ export const CreateChannelModal = () => {
       <DialogContent className={"bg-white text-black p-0 overflow-hidden"}>
         <DialogHeader className={"pt-8 px-6"}>
           <DialogTitle className={"text-2xl text-center font-bold"}>
-            Создание канала
+            Создание комнаты
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -74,6 +94,7 @@ export const CreateChannelModal = () => {
             <div className={"space-y-8 px-6 "}>
               <FormField
                 control={form.control}
+                name={"name"}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel
@@ -81,12 +102,12 @@ export const CreateChannelModal = () => {
                         "uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70"
                       }
                     >
-                      Название канала
+                      Название комнаты
                     </FormLabel>
                     <FormControl>
                       <Input
                         type={"text"}
-                        placeholder={"Введите название канала"}
+                        placeholder={"Введите название комнаты"}
                         {...field}
                         disabled={isLoading}
                         className={
@@ -97,7 +118,44 @@ export const CreateChannelModal = () => {
                     <FormMessage />
                   </FormItem>
                 )}
-                name={"name"}
+              />
+
+              <FormField
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Тип комнаты</FormLabel>
+                    <Select
+                      disabled={isLoading}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger
+                          className={
+                            "bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none"
+                          }
+                        >
+                          <SelectValue placeholder={"Выберите тип комнаты"} />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectGroup>
+                          {Object.values(ChannelType)?.map((type) => (
+                            <SelectItem
+                              key={type}
+                              value={type}
+                              className={"capitalize"}
+                            >
+                              {type.toLowerCase()}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+                name={"type"}
               />
             </div>
             <DialogFooter className={"bg-gray-100 px-6 py-4"}>
