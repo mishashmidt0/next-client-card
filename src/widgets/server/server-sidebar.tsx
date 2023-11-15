@@ -1,13 +1,29 @@
+import { ChannelType, MemberRole } from "@prisma/client";
+import { Hash, Mic, ShieldAlert, ShieldCheck, Video } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { ServerHeader } from "./server-header";
+import { ServerSearch } from "./server-search";
 
 import { currentProfile } from "@/src/shared/lib/current-profile";
 import { db } from "@/src/shared/lib/db";
+import { ScrollArea } from "@/src/shared/ui/scroll-area";
 
 interface ServerSidebarProps {
   serverId: string;
 }
+
+const iconMap = {
+  [ChannelType.TEXT]: <Hash className={"mt-2 h-4 w-4"} />,
+  [ChannelType.AUDIO]: <Mic className={"mt-2 h-4 w-4"} />,
+  [ChannelType.VIDEO]: <Video className={"mt-2 h-4 w-4"} />,
+};
+
+const roleIconMap = {
+  [MemberRole.GUEST]: null,
+  [MemberRole.MODERATOR]: <ShieldCheck className={"w-4 h-4 text-indigo-500"} />,
+  [MemberRole.ADMIN]: <ShieldAlert className={"w-4 h-4 text-indigo-500"} />,
+};
 
 export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
   const profile = await currentProfile();
@@ -41,6 +57,19 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
     return redirect("/");
   }
 
+  const textChannel = server?.channels.filter(
+    (channel) => channel.type === ChannelType.TEXT,
+  );
+  const audioChannel = server?.channels.filter(
+    (channel) => channel.type === ChannelType.AUDIO,
+  );
+  const videoChannel = server?.channels.filter(
+    (channel) => channel.type === ChannelType.VIDEO,
+  );
+  const members = server?.members.filter(
+    (member) => member.profileId !== profile.id,
+  );
+
   const role = server.members.find((member) => member.profile.id === profile.id)
     ?.role;
 
@@ -51,6 +80,50 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
       }
     >
       <ServerHeader server={server} role={role} />
+      <ScrollArea className={"flex-1 px-3"}>
+        <div className={"mt-3"}>
+          <ServerSearch
+            data={[
+              {
+                label: "Text Channel",
+                type: "channel",
+                data: textChannel.map((channel) => ({
+                  id: channel.id,
+                  name: channel.name,
+                  icon: iconMap[channel.type],
+                })),
+              },
+              {
+                label: "Voice Channel",
+                type: "channel",
+                data: audioChannel.map((channel) => ({
+                  id: channel.id,
+                  name: channel.name,
+                  icon: iconMap[channel.type],
+                })),
+              },
+              {
+                label: "Video Channel",
+                type: "channel",
+                data: videoChannel.map((channel) => ({
+                  id: channel.id,
+                  name: channel.name,
+                  icon: iconMap[channel.type],
+                })),
+              },
+              {
+                label: "Members",
+                type: "member",
+                data: members.map((member) => ({
+                  id: member.id,
+                  name: member.profile.name,
+                  icon: roleIconMap[member.role],
+                })),
+              },
+            ]}
+          />
+        </div>
+      </ScrollArea>
     </div>
   );
 };
