@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 
 import { CreateChannelModal } from "@/src/widgets/modals/create-channel-modal";
 import { CreateServerModal } from "@/src/widgets/modals/create-server-modal";
+import { DeleteChannelModal } from "@/src/widgets/modals/delete-channel-modal";
 import { DeleteServerModal } from "@/src/widgets/modals/delete-server-modal";
+import { EditChannelModal } from "@/src/widgets/modals/edit-channel-modal";
 import { EditServerModal } from "@/src/widgets/modals/edit-server-modal";
 import { InviteModal } from "@/src/widgets/modals/invite-modal";
 import { LeaveServerModal } from "@/src/widgets/modals/leave-server-modal";
@@ -31,6 +33,8 @@ export const ModalProvider = () => {
       <CreateChannelModal />
       <LeaveServerModal />
       <DeleteServerModal />
+      <DeleteChannelModal />
+      <EditChannelModal />
     </>
   );
 };
