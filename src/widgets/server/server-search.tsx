@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Search } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 
 import {
   CommandDialog,
@@ -28,6 +29,40 @@ interface ServerSearchProps {
 
 export const ServerSearch = ({ data }: ServerSearchProps) => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const params = useParams();
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+
+    document.addEventListener("keydown", down);
+
+    return () => {
+      document.removeEventListener("keydown", down);
+    };
+  }, []);
+
+  const onClick = ({
+    id,
+    type,
+  }: {
+    id: string;
+    type: "channel" | "member";
+  }) => {
+    setOpen(false);
+    if (type === "member") {
+      router.push(`/server/${params?.serverId as string}/conversations/${id}`);
+    }
+
+    if (type === "channel") {
+      router.push(`/server/${params?.serverId as string}/channels/${id}`);
+    }
+  };
 
   return (
     <>
@@ -65,7 +100,13 @@ export const ServerSearch = ({ data }: ServerSearchProps) => {
             return (
               <CommandGroup key={label} heading={label}>
                 {data.map(({ icon, name, id }) => (
-                  <CommandItem key={id} className={"flex gap-1 items-center"}>
+                  <CommandItem
+                    key={id}
+                    className={"flex items-center"}
+                    onSelect={() => {
+                      onClick({ id, type });
+                    }}
+                  >
                     {icon}
                     <span>{name}</span>
                   </CommandItem>
