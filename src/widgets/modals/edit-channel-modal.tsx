@@ -1,7 +1,7 @@
 import { ChannelType } from ".prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -44,19 +44,18 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 });
 
-export const CreateChannelModal = () => {
+export const EditChannelModal = () => {
   const { isOpen, type, onClose, data } = useModal();
   const router = useRouter();
-  const params = useParams();
-  const { channelType } = data;
+  const { channel, server } = data;
 
-  const isModalOpen = isOpen && type === "createChannel";
+  const isModalOpen = isOpen && type === "editChannel";
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     values: {
-      type: channelType ?? ChannelType.TEXT,
-      name: "",
+      type: channel?.type ?? ChannelType.TEXT,
+      name: channel?.name ?? "",
     },
   });
 
@@ -64,9 +63,9 @@ export const CreateChannelModal = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post("/api/channels", values, {
+      await axios.patch(`/api/channels/${channel?.id}`, values, {
         params: {
-          serverId: params?.serverId,
+          serverId: server?.id,
         },
       });
       form.reset();
@@ -87,7 +86,7 @@ export const CreateChannelModal = () => {
       <DialogContent className={"bg-white text-black p-0 overflow-hidden"}>
         <DialogHeader className={"pt-8 px-6"}>
           <DialogTitle className={"text-2xl text-center font-bold"}>
-            Создание комнаты
+            Изменить комнату
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>

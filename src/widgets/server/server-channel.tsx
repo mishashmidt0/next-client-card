@@ -5,6 +5,7 @@ import { Edit, Hash, Lock, Mic, Trash, Video } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 
 import { ActionTooltip } from "@/src/entity/action-tooltip";
+import { type ModalType, useModal } from "@/src/shared/hooks/use-modal-store";
 import { cn } from "@/src/shared/lib/utils";
 
 interface ServerChannelProps {
@@ -24,14 +25,23 @@ export const ServerChannel = ({
   channel,
   role,
 }: ServerChannelProps) => {
+  const { onOpen } = useModal();
   const params = useParams();
   const router = useRouter();
 
   const Icon = iconMap[channel.type];
 
+  const onClick = () => {
+    router.push(`/servers/${server.id}/channels/${channel.id}`);
+  };
+  const onAction = (e: React.MouseEvent, action: ModalType) => {
+    e.stopPropagation();
+    onOpen(action, { server, channel });
+  };
+
   return (
     <button
-      onClick={() => {}}
+      onClick={onClick}
       className={cn(
         "group p-2  rounded-md flex items-center w-full gap-x-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 mb-1 transition",
         params?.channelId === channel.id && "bg-zinc-700/20 dark:bg-zinc-200",
@@ -53,6 +63,9 @@ export const ServerChannel = ({
         <div className={"ml-auto flex items-center gap-x-2"}>
           <ActionTooltip label={"Изменить"}>
             <Edit
+              onClick={(e) => {
+                onAction(e, "editChannel");
+              }}
               className={
                 "hidden group-hover:block text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 w-4 h-4 "
               }
@@ -60,6 +73,9 @@ export const ServerChannel = ({
           </ActionTooltip>
           <ActionTooltip label={"Удалить"}>
             <Trash
+              onClick={(e) => {
+                onAction(e, "deleteChannel");
+              }}
               className={
                 "hidden group-hover:block text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 w-4 h-4 "
               }
