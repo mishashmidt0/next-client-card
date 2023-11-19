@@ -11,6 +11,7 @@ import { ThemeProvider } from "src/widgets/providers/theme-provider";
 import { Providers } from "@/app/providers";
 import { cn } from "@/src/shared/lib/utils";
 import { ModalProvider } from "@/src/widgets/providers/modal-provider";
+import { SocketProvider } from "@/src/widgets/providers/socket-provider";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -30,7 +31,7 @@ export default function RootLayout(props: Props) {
       <html lang="en">
         <body
           className={cn([
-            "min-h-screen bg-white dark:bg-[#313338]",
+            "min-h-[100vh] bg-white dark:bg-[#313338]",
             font.className,
           ])}
         >
@@ -40,12 +41,14 @@ export default function RootLayout(props: Props) {
             enableSystem={false}
             disableTransitionOnChange
           >
-            <Providers>
-              <ModalProvider />
+            <SocketProvider>
+              <Providers>
+                <ModalProvider />
 
-              {props.children}
-              {props.modal}
-            </Providers>
+                {props.children}
+                {props.modal}
+              </Providers>
+            </SocketProvider>
           </ThemeProvider>
           <Toaster />
         </body>
