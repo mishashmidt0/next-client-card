@@ -33,7 +33,7 @@ const ServerIdLayout = async ({ children, params }: ServerIdLayoutProps) => {
   }
 
   return (
-    <div className={"h-full"}>
+    <div className={" h-full"}>
       <div
         className={"hidden md:flex h-full w-60 z-20 flex-col inset-y-0 fixed"}
       >
