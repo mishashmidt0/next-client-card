@@ -1,11 +1,12 @@
-import { type NextApiRequest, type NextApiResponse } from "next";
+import { type NextApiRequest } from "next";
 
 import { currentProfilePages } from "@/src/shared/lib/current-profile-pages";
 import { db } from "@/src/shared/lib/db";
+import { type NextApiResponseServerIo } from "@/src/shared/types/server";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponseServerIo,
 ) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
@@ -18,18 +19,26 @@ export default async function handler(
 
     if (!profile) {
       res.status(401).json({ message: "Unauthorized" });
+
+      return;
     }
 
     if (!serverId) {
       res.status(400).json({ message: "Server Id missing" });
+
+      return;
     }
 
     if (!channelId) {
       res.status(400).json({ message: "Channel Id missing" });
+
+      return;
     }
 
     if (!content) {
       res.status(400).json({ message: "Content Id missing" });
+
+      return;
     }
 
     const server = await db.server.findFirst({
@@ -41,10 +50,15 @@ export default async function handler(
           },
         },
       },
+      include: {
+        members: true,
+      },
     });
 
     if (!server) {
       res.status(404).json({ message: "Server not found" });
+
+      return;
     }
 
     const channel = await db.channel.findFirst({
@@ -58,12 +72,14 @@ export default async function handler(
       res.status(404).json({ message: "Channel not found" });
     }
 
-    const member = server?.members.find(
+    const member = server.members.find(
       (member) => member.profileId === profile.id,
     );
 
     if (!member) {
       res.status(404).json({ message: "Member not found" });
+
+      return;
     }
 
     const message = await db.message.create({
@@ -84,7 +100,7 @@ export default async function handler(
 
     const channelKey = `chat:${channelId as string}:message`;
 
-    res?.socket?.server?.io.emit(channelKey, message);
+    res?.socket?.server?.io?.emit(channelKey, message);
 
     res.status(200).json(message);
   } catch (e) {
