@@ -1,12 +1,7 @@
 import { Menu } from "lucide-react";
 
 import { Button } from "@/src/shared/ui/button";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetTrigger,
-} from "@/src/shared/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/src/shared/ui/sheet";
 import { NavigationSidebar } from "@/src/widgets/navigation/navigation-sidebar";
 import { ServerSidebar } from "@/src/widgets/server/server-sidebar";
 interface MobileToggleProps {
