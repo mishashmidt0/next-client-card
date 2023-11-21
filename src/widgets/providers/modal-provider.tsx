@@ -11,6 +11,7 @@ import { EditServerModal } from "@/src/widgets/modals/edit-server-modal";
 import { InviteModal } from "@/src/widgets/modals/invite-modal";
 import { LeaveServerModal } from "@/src/widgets/modals/leave-server-modal";
 import { MembersModal } from "@/src/widgets/modals/members-modal";
+import { MessageFileModal } from "@/src/widgets/modals/message-file-modal";
 
 // TODO возможно заменить эту логику на динмическу компоненту
 export const ModalProvider = () => {
@@ -35,6 +36,7 @@ export const ModalProvider = () => {
       <DeleteServerModal />
       <DeleteChannelModal />
       <EditChannelModal />
+      <MessageFileModal />
     </>
   );
 };
