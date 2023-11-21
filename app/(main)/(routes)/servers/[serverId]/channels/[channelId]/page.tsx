@@ -5,6 +5,7 @@ import { currentProfile } from "@/src/shared/lib/current-profile";
 import { db } from "@/src/shared/lib/db";
 import { ChatHeader } from "@/src/widgets/chat/chat-header";
 import { ChatInput } from "@/src/widgets/chat/chat-input";
+import { ChatMessages } from "@/src/widgets/chat/chat-messages";
 
 interface ChannelIdPageProps {
   params: {
@@ -44,7 +45,7 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
         serverId={channel.serverId}
         type={"channel"}
       />
-      <div className={"flex-1 "}>Future Messages</div>
+      <ChatMessages />
       <ChatInput
         type={"channel"}
         name={channel.name}
