@@ -31,7 +31,7 @@ export default function RootLayout(props: Props) {
       <html lang="en">
         <body
           className={cn([
-            "min-h-[100vh] bg-white dark:bg-[#313338]",
+            "h-[100vh] bg-white dark:bg-[#313338]",
             font.className,
           ])}
         >

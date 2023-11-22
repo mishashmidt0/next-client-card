@@ -1,6 +1,5 @@
 import Back from "@/src/entity/back";
 import { ROUTES } from "@/src/shared/const/routes";
-import Chat from "@/src/widgets/chat";
 import PackList from "@/src/widgets/pack-list";
 
 // TODO сделать попап для копирования ссылки
@@ -12,8 +11,6 @@ export default function Home() {
     <div>
       <Back href={ROUTES.main} title={"На главную"} />
       <div className={"grid grid-auto-cols gap-4"}>
-        <Chat />
-
         <PackList />
       </div>
     </div>
