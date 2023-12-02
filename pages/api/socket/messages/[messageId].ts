@@ -1,4 +1,4 @@
-import { MemberRole } from ".prisma/client";
+import { MemberRole } from "@prisma/client";
 import { type NextApiRequest } from "next";
 
 import { currentProfile } from "@/src/shared/lib/current-profile";
@@ -74,7 +74,7 @@ export default async function handler(
     }
 
     const member = server.members.find(
-      (member) => member.profileId === profile.id,
+      (member: any) => member.profileId === profile.id,
     );
 
     if (!member) {
