@@ -1,7 +1,7 @@
 import { MemberRole } from "@prisma/client";
 import { type NextApiRequest } from "next";
 
-import { currentProfile } from "@/src/shared/lib/current-profile";
+import { currentProfilePages } from "@/src/shared/lib/current-profile-pages";
 import { db } from "@/src/shared/lib/db";
 import { type NextApiResponseServerIo } from "@/src/shared/types/server";
 interface IQuery {
@@ -13,12 +13,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponseServerIo,
 ) {
-  if (req.method !== "DELTE" && req.method !== "PATCH") {
+  if (req.method !== "DELETE" && req.method !== "PATCH") {
     res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const profile = await currentProfile();
+    const profile = await currentProfilePages(req);
     const { messageId, serverId, channelId } = req.query as unknown as IQuery;
     const { content } = req.body;
 
@@ -103,18 +103,18 @@ export default async function handler(
       return;
     }
 
-    const isMessageOwner = message.memberId === profile.id;
+    const isMessageOwner = message.memberId === member.id;
     const isAdmin = member.role === MemberRole.ADMIN;
     const isModerator = member.role === MemberRole.MODERATOR;
     const canModify = isAdmin || isModerator;
 
     if (!canModify) {
-      res.status(401).json({ message: "Unauthorized" });
+      res.status(401).json({ message: "Unauthorized canModify" });
     }
 
     if (req.method === "PATCH") {
       if (!isMessageOwner) {
-        res.status(401).json({ message: "Unauthorized" });
+        res.status(401).json({ message: "Unauthorized isMessageOwner" });
       }
 
       await db.message.update({
