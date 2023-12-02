@@ -70,6 +70,8 @@ export default async function handler(
 
     if (!channel) {
       res.status(404).json({ message: "Channel not found" });
+
+      return;
     }
 
     const member = server.members.find(

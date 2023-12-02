@@ -41,15 +41,13 @@ export const ChatMessages = ({
 }: ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`;
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
-    useChatQuery({
-      queryKey,
-      paramKey,
-      paramValue,
-      apiUrl,
-    });
+  const { data, status } = useChatQuery({
+    queryKey,
+    paramKey,
+    paramValue,
+    apiUrl,
+  });
 
-  console.log(data);
   if (status === "pending") {
     return (
       <div className={"flex flex-col flex-1 justify-center items-center"}>
