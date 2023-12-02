@@ -8,11 +8,13 @@ import { type Member, type Profile } from "@prisma/client";
 import axios from "axios";
 import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from "lucide-react";
 import Image from "next/image";
+import { useParams, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { ActionTooltip } from "@/src/entity/action-tooltip";
 import { UserAvatar } from "@/src/entity/user-avatar";
+import { useModal } from "@/src/shared/hooks/use-modal-store";
 import { cn } from "@/src/shared/lib/utils";
 import { Button } from "@/src/shared/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/src/shared/ui/form";
@@ -55,8 +57,57 @@ export const ChatItem = ({
   timestamp,
   id,
 }: ChatItemProps) => {
+  const { onOpen } = useModal();
+  const router = useRouter();
+  const params = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+
+  const fileType = fileUrl?.split(".").pop();
+
+  const isAdmin = currentMember.role === MemberRole.ADMIN;
+  const isModerator = currentMember.role === MemberRole.MODERATOR;
+  const isOwner = currentMember.id === member.id;
+
+  const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
+  const canEditMessage = !deleted && isOwner && !fileUrl;
+
+  const isPDF = fileType === "pdf" && fileUrl;
+  const isImage = !isPDF && fileUrl;
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      content,
+    },
+  });
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await axios.patch(`/${socketUrl}/${id}`, values, {
+        params: socketQuery,
+      });
+
+      form.reset();
+      setIsEditing(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onMemberClick = () => {
+    if (member.id === currentMember.id) {
+      return;
+    }
+    router.push(
+      `/servers/${params?.serverId as string}/conversations/${member.id}`,
+    );
+  };
+
+  useEffect(() => {
+    form.reset({
+      content,
+    });
+  }, [content]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -72,43 +123,6 @@ export const ChatItem = ({
     };
   }, []);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      content,
-    },
-  });
-
-  useEffect(() => {
-    form.reset({
-      content,
-    });
-  }, [content]);
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.patch(`${socketUrl}/${id}`, values, {
-        params: {
-          query: socketQuery,
-        },
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const fileType = fileUrl?.split(".").pop();
-
-  const isAdmin = currentMember.role === MemberRole.ADMIN;
-  const isModerator = currentMember.role === MemberRole.MODERATOR;
-  const isOwner = currentMember.id === member.id;
-
-  const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner);
-  const canEditMessage = !deleted && isOwner && !fileUrl;
-
-  const isPDF = fileType === "pdf" && fileUrl;
-  const isImage = !isPDF && fileUrl;
-
   return (
     <div
       className={
@@ -116,7 +130,10 @@ export const ChatItem = ({
       }
     >
       <div className={"group flex gap-x-2 items-center w-full"}>
-        <div className={"cursor-pointer hover:drop-shadow-md transition"}>
+        <div
+          onClick={onMemberClick}
+          className={"cursor-pointer hover:drop-shadow-md transition"}
+        >
           <UserAvatar src={member.profile.imageUrl} />
         </div>
 
@@ -124,6 +141,7 @@ export const ChatItem = ({
           <div className={"flex items-center gap-x-2"}>
             <div className={"flex items-center"}>
               <p
+                onClick={onMemberClick}
                 className={
                   "cursor-pointer font-semibold text-sm hover:underline"
                 }
@@ -152,6 +170,7 @@ export const ChatItem = ({
                 src={fileUrl}
                 alt={content}
                 fill
+                sizes={"w-48"}
                 className={"object-cover"}
               />
             </a>
@@ -231,40 +250,6 @@ export const ChatItem = ({
               </span>
             </Form>
           )}
-          {!fileUrl && isDeleting && (
-            <Form {...form}>
-              <form
-                className={"flex items-center w-full gap-x-2 pt-2"}
-                onSubmit={form.handleSubmit(onSubmit)}
-              >
-                <FormField
-                  control={form.control}
-                  render={({ field }) => (
-                    <FormItem className={"flex-1"}>
-                      <FormControl>
-                        <div className={"relative w-full"}>
-                          <Input
-                            placeholder="Deleted message"
-                            className={
-                              "p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
-                            }
-                            {...field}
-                          />
-                        </div>
-                      </FormControl>
-                    </FormItem>
-                  )}
-                  name={"content"}
-                />
-                <Button size={"sm"} variant={"primary"}>
-                  Save
-                </Button>
-              </form>
-              <span className={"text-[10px] mt-1 text-zinc-400"}>
-                Press escape to cancel, enter save
-              </span>
-            </Form>
-          )}
         </div>
       </div>
       {canDeleteMessage && (
@@ -274,10 +259,10 @@ export const ChatItem = ({
           }
         >
           {canEditMessage && (
-            <ActionTooltip label={"Edit"}>
+            <ActionTooltip label={"Delete"}>
               <Edit
                 onClick={() => {
-                  setIsDeleting(true);
+                  setIsEditing(true);
                 }}
                 className={
                   "cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
@@ -288,7 +273,10 @@ export const ChatItem = ({
           <ActionTooltip label={"Deleted"}>
             <Trash
               onClick={() => {
-                setIsDeleting(true);
+                onOpen("deleteMessage", {
+                  apiUrl: `/${socketUrl}/${id}`,
+                  query: socketQuery,
+                });
               }}
               className={
                 "cursor-pointer ml-auto w-4 h-4 text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
