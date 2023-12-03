@@ -62,7 +62,7 @@ const createNewConversation = async (
         },
       },
     });
-  } catch (e) {
+  } catch {
     return null;
   }
 };
