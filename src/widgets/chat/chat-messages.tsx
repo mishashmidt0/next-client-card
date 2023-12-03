@@ -8,6 +8,7 @@ import { Loader2, ServerCrash } from "lucide-react";
 import { ChatItem } from "./chat-item";
 
 import { useChatQuery } from "@/src/shared/hooks/use-chat-query";
+import { useChatScroll } from "@/src/shared/hooks/use-chat-scroll";
 import { useChatSocket } from "@/src/shared/hooks/use-chat-socket";
 import { ChatWelcome } from "@/src/widgets/chat/chat-welcome";
 type MessageWithMemberWithProfile = Message & {
@@ -47,7 +48,6 @@ export const ChatMessages = ({
   const chatRef = useRef<ElementRef<"div">>(null);
   const bottomRef = useRef<ElementRef<"div">>(null);
 
-  useChatSocket({ addKey, updateKey, queryKey });
   const { data, status, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useChatQuery({
       queryKey,
@@ -56,6 +56,14 @@ export const ChatMessages = ({
       apiUrl,
     });
 
+  useChatSocket({ addKey, updateKey, queryKey });
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    loadMore: fetchNextPage,
+    shouldLoadMore: !isFetchingNextPage && hasNextPage,
+    count: data?.pages?.[0]?.items?.length ?? 0,
+  });
   if (status === "pending") {
     return (
       <div className={"flex flex-col flex-1 justify-center items-center"}>

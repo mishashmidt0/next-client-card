@@ -23,9 +23,8 @@ export const useChatScroll = ({
     const handlerScroll = () => {
       const scrollTop = topDiv?.scrollTop;
 
-      if (scrollTop === 0 && shouldLoadMore && !hasInitialized) {
+      if (scrollTop === 0 && shouldLoadMore) {
         loadMore();
-        setHasInitialized(true);
       }
     };
 
@@ -34,12 +33,12 @@ export const useChatScroll = ({
     return () => {
       topDiv?.removeEventListener("scroll", handlerScroll);
     };
-  }, [chatRef, hasInitialized, loadMore, shouldLoadMore]);
+  }, [shouldLoadMore, loadMore, chatRef]);
 
   useEffect(() => {
     const bottomDiv = bottomRef?.current;
     const topDiv = chatRef?.current;
-    const shouldAotuoScroll = () => {
+    const shouldAutoScroll = () => {
       if (!hasInitialized && bottomDiv) {
         setHasInitialized(true);
 
@@ -54,7 +53,13 @@ export const useChatScroll = ({
 
       return distanceFromBottom <= 100;
     };
-  }, []);
 
-  return {};
+    if (shouldAutoScroll()) {
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({
+          behavior: "smooth",
+        });
+      }, 100);
+    }
+  }, [bottomRef, chatRef, count, hasInitialized]);
 };
