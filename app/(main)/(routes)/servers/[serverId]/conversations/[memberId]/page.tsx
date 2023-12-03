@@ -1,6 +1,7 @@
 import { redirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
+import { MediaRoom } from "@/src/entity/media-room";
 import { getOrCreateConversation } from "@/src/shared/lib/conversation";
 import { currentProfile } from "@/src/shared/lib/current-profile";
 import { db } from "@/src/shared/lib/db";
@@ -61,6 +62,9 @@ const MemberIdPage = async ({ params, searchParams }: MemberIdPageProps) => {
         serverId={params.serverId}
         type="conversation"
       />
+      {searchParams.video && (
+        <MediaRoom chatId={conversation.id} video={true} audio={true} />
+      )}
       {!searchParams.video && (
         <>
           <ChatMessages

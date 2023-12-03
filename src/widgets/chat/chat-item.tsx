@@ -83,7 +83,7 @@ export const ChatItem = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/${socketUrl}/${id}`, values, {
+      await axios.patch(`${socketUrl}/${id}`, values, {
         params: socketQuery,
       });
 
@@ -107,7 +107,7 @@ export const ChatItem = ({
     form.reset({
       content,
     });
-  }, [content]);
+  }, [content, form]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -274,7 +274,7 @@ export const ChatItem = ({
             <Trash
               onClick={() => {
                 onOpen("deleteMessage", {
-                  apiUrl: `/${socketUrl}/${id}`,
+                  apiUrl: `${socketUrl}/${id}`,
                   query: socketQuery,
                 });
               }}
