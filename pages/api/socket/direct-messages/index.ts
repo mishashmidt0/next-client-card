@@ -84,7 +84,7 @@ export default async function handler(
       return;
     }
 
-    const message = await db.directMessage.create({
+    const directMessage = await db.directMessage.create({
       data: {
         content,
         fileUrl,
@@ -102,9 +102,9 @@ export default async function handler(
 
     const channelKey = `chat:${conversationId as string}:messages`;
 
-    res?.socket?.server?.io?.emit(channelKey, message);
+    res?.socket?.server?.io?.emit(channelKey, directMessage);
 
-    res.status(200).json(message);
+    res.status(200).json(directMessage);
   } catch (error) {
     console.log("[DIRECT_MESSAGES_POST]", error);
 
